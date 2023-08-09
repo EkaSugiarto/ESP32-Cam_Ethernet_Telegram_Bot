@@ -14,7 +14,8 @@ This code has features:
 - Send photo and time from NTP to all user who have the Telegram BOT link
 - Send photo to only several user who joined to Telegram Group with the BOT when a sensor pin triggered HIGH
 
-Next feature improve:
+
+Next interesting feature to improve:
 - This cam can do live streaming
 - Can change the view direction by phone
 - Integrated with dedicated mobile/PC app or website
