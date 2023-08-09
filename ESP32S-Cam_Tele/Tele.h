@@ -1,7 +1,7 @@
 #include <UniversalTelegramBot.h>
 
 //Token dari BOT yang digunakan
-#define BOT_TOKEN "6503495044:AAH-zAmJefB2iBnjeJy1LT1pbp4kV5OWEjE"
+#define BOT_TOKEN ""
 
 const unsigned long BOT_MTBS = 1000;
 
@@ -126,7 +126,7 @@ void KirimFoto() {
   file.close();
 }
 
-String chat_idd = "824519381";
+String chat_idd = "";
 
 void KirimFotoGrup() {
   TakePhoto();
