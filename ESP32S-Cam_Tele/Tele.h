@@ -1,7 +1,7 @@
 #include <UniversalTelegramBot.h>
 
 //Token dari BOT yang digunakan
-#define BOT_TOKEN "6502923709:AAH6WNSSOTMD2iuBSS8dlHl_WZAQ7Cn8ncI"
+#define BOT_TOKEN "6503495044:AAH-zAmJefB2iBnjeJy1LT1pbp4kV5OWEjE"
 
 const unsigned long BOT_MTBS = 1000;
 
@@ -13,8 +13,8 @@ UniversalTelegramBot bot(BOT_TOKEN, client);
 
 unsigned long bot_lasttime;
 
-void KirimFoto1();
-void KirimFoto2();
+void KirimFoto();
+void KirimFotoGrup();
 void SensorL();
 void TeleL();
 
@@ -40,27 +40,37 @@ void handleNewMessages(int numNewMessages) {
       from_name = "Guest";
 
     //Jika pesan yang dikirim adalah "/start"
-    if (text == "/start") {
+    if (text == "/start@CCTV_TA_bot" || text == "/start") {
       pesan = "Welcome to TA CCTV bot, " + from_name + "!";
       bot.sendMessage(chat_id, pesan);
     }
 
     //Jika pesan yang dikirim adalah "/foto"
-    if (text == "/foto") {
-      KirimFoto1();
+    if (text == "/foto@CCTV_TA_bot" || text == "/foto") {
+      KirimFoto();
+      //Menulis waktu dari server NTP saat foto dikirim
+      text = "";
+      pesan = "";
+      pesan = timee;
+      bot.sendMessage(chat_id, pesan);
     }
 
     //Jika pesan yang dikirim adalah "/5foto"
-    if (text == "/5foto") {
+    if (text == "/5foto@CCTV_TA_bot" || text == "/5foto") {
 
       //Perulangan untuk mengirim 1 foto dan teks waktu server NTP saat ini sebanyak 5 kali
       for (int iii = 0; iii < 5; iii++) {
-        KirimFoto1();
+        KirimFoto();
+        //Menulis waktu dari server NTP saat foto dikirim
+        text = "";
+        pesan = "";
+        pesan = timee;
+        bot.sendMessage(chat_id, pesan);
       }
     }
 
     //Jika pesan yang dikirim adalah "/jam"
-    if (text == "/jam") {
+    if (text == "/jam" || text == "/jam@CCTV_TA_bot") {
 
       //Menulis waktu dari server NTP saat foto dikirim
       pesan = timee;
@@ -86,9 +96,8 @@ void TeleL() {
   }
 }
 
-void KirimFoto1() {
-  //Mengambil 1 frame foto dan membuat file "foto.jpg"
-  LampuIROn();
+//Fungsi untuk mengirim foto hanya ke user yang masuk ke grup "CCTV TA Tele"
+void KirimFoto() {
   TakePhoto();
 
   pesan = "";
@@ -101,6 +110,13 @@ void KirimFoto1() {
     pesan = "Foto gagal diambil\n";
   }
 
+  if (!isMoreDataAvailable()) {
+    KirimFoto();
+  }
+
+  //Mengirim teks ke user yang mengirim pesan tersebut
+  // bot.sendMessage(chat_id, pesan);
+
   //Mengirim foto ke user yang mengirim pesan tersebut
   bot.sendPhotoByBinary(chat_id, "image/jpeg", file.size(),
                         isMoreDataAvailable,
@@ -108,21 +124,11 @@ void KirimFoto1() {
 
   //Menutup file
   file.close();
-
-  //Menulis waktu dari server NTP saat foto dikirim
-  pesan += timee;
-
-  //Mengirim teks ke user yang mengirim pesan tersebut
-  bot.sendMessage(chat_id, pesan);
-  LampuIROff();
 }
 
-String chat_idd = "-824519381";
+String chat_idd = "824519381";
 
-//Fungsi untuk mengirim foto hanya ke user yang masuk ke grup "CCTV TA Tele"
-void KirimFoto2() {
-  //Mengambil 1 frame foto dan membuat file "foto.jpg"
-  LampuIROn();
+void KirimFotoGrup() {
   TakePhoto();
 
   pesan = "";
@@ -133,6 +139,10 @@ void KirimFoto2() {
   //Mengecek keberadaan file "foto.jpg"
   if (!file) {
     pesan = "Foto gagal diambil\n";
+  }
+
+  if (!isMoreDataAvailable()) {
+    KirimFotoGrup();
   }
 
   //Mengirim foto ke user yang mengirim pesan tersebut
@@ -142,13 +152,6 @@ void KirimFoto2() {
 
   //Menutup file
   file.close();
-
-  //Menulis waktu dari server NTP saat foto dikirim
-  pesan += timee;
-
-  //Mengirim teks ke user yang mengirim pesan tersebut
-  bot.sendMessage(chat_id, pesan);
-  LampuIROff();
 }
 
 //Fungsi untuk membaca nilai analog dari pin sensor.
@@ -156,7 +159,7 @@ void KirimFoto2() {
 void SensorL() {
   if (waktu.getSeconds() % 10 == 0) {
     if (analogRead(Sensorpin >= 4000)) {
-      KirimFoto2();
+      KirimFotoGrup();
     }
   }
 }

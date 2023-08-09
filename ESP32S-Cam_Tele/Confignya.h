@@ -59,16 +59,7 @@ const int Sensorpin = 4;
 //Pin relay lampu IR
 const int IRpin = 16;
 
-//Config untuk output PWM
-const int freq = 5000;
-const int ledChannel = 0;
-const int res = 8;
-
 //Setup untuk PWM di ESP32
 void PWMS() {
-  // configure LED PWM functionalitites
-  ledcSetup(ledChannel, freq, res);
-
-  // attach the channel to the GPIO to be controlled
-  ledcAttachPin(IRpin, ledChannel);
+  pinMode(IRpin, OUTPUT);
 }

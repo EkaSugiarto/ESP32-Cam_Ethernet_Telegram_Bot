@@ -42,12 +42,16 @@ void LANS() {
 
 //Fungsi loop untuk ethernet
 void LANCheck() {
+  LANS();
   if (Ethernet.linkStatus() != LinkON) {
 
     //Setup koneksi ethernet
     LANS();
 
     Serial.println("Kabel LAN tidak terhubung");
+
+    //Setup NTP
+    NTPS();
 
     delay(5000);
     loop();

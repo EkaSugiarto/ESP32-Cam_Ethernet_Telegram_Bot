@@ -1,12 +1,15 @@
+#include "esp32-hal-gpio.h"
 #include "FS.h"
 #include <SPIFFS.h>
 
 File file;
 
 void SPIFFSS();
+void LampuIROn();
+void LampuIROff();
 
 void TakePhoto() {
-
+  LampuIROn();
   file = SPIFFS.open("/foto.jpg", FILE_WRITE);
 
   if (!file) {
@@ -28,6 +31,7 @@ void TakePhoto() {
   esp_camera_fb_return(fb);
 
   file.close();
+  LampuIROff();
 }
 
 void SPIFFSS() {
@@ -40,9 +44,9 @@ void SPIFFSS() {
 
 //Fungsi untuk menyalakan lampu IR dengan memberikan sinyal PWM ke modul Trigger Mosfet PWM
 void LampuIROn() {
-  ledcWrite(ledChannel, 255);
+  digitalWrite(IRpin, HIGH);
 }
 
 void LampuIROff() {
-  ledcWrite(ledChannel, 0);
+  digitalWrite(IRpin, LOW);
 }
